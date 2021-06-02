@@ -1,0 +1,133 @@
+---
+title: Single-cell RNA-sequencing data anylsis for in vitro experiments with ctrl,
+  biontech and astrazeneca
+output:
+  html_document:
+    df_print: paged
+---
+## Gene expression analysis
+
+### This library contains 3 donors - each for ctrl, biontech and astrazeneca. 7 hours post treatment, the samples were pooled and the library was prepared and sequenced with droplet based sequencing method from 10x genomics. Samples are hash-tagged - the has-tags counts are available and also the gene expression counts.
+
+```{r read10x}
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(limma)
+
+# Load the PBMC dataset
+data <- Read10X(data.dir = "filtered_feature_bc_matrix/")
+
+# Initialize the Seurat object with the raw (non-normalized data).
+expt <- CreateSeuratObject(counts = data[["Gene Expression"]], project = "in vitro")
+
+# Add additional assay 
+hto_assay <- CreateAssayObject(counts = data[["Antibody Capture"]])
+
+expt[["HTO"]] <- hto_assay
+```
+
+```{r QC}
+expt[["percent.mt"]] <- PercentageFeatureSet(expt, pattern = "^MT-")
+head(expt@meta.data, 5)
+```
+
+```{r Vis violin}
+# Visualize QC metrics as a violin plot
+VlnPlot(expt, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+```
+
+```{r feature scatter}
+plot1 <- FeatureScatter(expt, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot2 <- FeatureScatter(expt, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+plot1 + plot2
+expt <- subset(expt, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 15)
+```
+
+```{r normalise}
+expt <- NormalizeData(expt, normalization.method = "LogNormalize", scale.factor = 10000)
+
+```
+
+```{r VarFeat}
+expt <- FindVariableFeatures(expt, selection.method = "vst", nfeatures = 2000)
+top10 <- head(VariableFeatures(expt), 10)
+top10
+
+plot1 <- VariableFeaturePlot(expt)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+plot2
+```
+
+```{r scaling}
+all.genes <- rownames(expt)
+expt <- ScaleData(expt, features = all.genes)
+
+```
+```{r PCA}
+# dimension reduction
+expt <- RunPCA(expt, features = VariableFeatures(object = expt))
+# Examine and visualize PCA results a few different ways
+print(expt[["pca"]], dims = 1:5, nfeatures = 5)
+
+VizDimLoadings(expt, dims = 1:2, reduction = "pca")
+DimPlot(expt, reduction = "pca")
+DimHeatmap(expt, dims = 1, cells = 500, balanced = TRUE)
+DimHeatmap(expt, dims = 1:15, cells = 500, balanced = TRUE)
+```
+
+```{r Neighbours and clusters}
+expt <- FindNeighbors(expt, dims = 1:10)
+expt <- FindClusters(expt, resolution = 0.5)
+```
+
+```{r UMAP}
+expt <- RunUMAP(expt, dims = 1:10)
+DimPlot(expt, reduction = "umap")
+```
+
+```{r clustering}
+expt.markers <- FindAllMarkers(expt, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+expt.markers %>%
+  group_by(cluster) %>%
+  top_n(n = 4, wt = avg_log2FC) -> expt.markers.two
+
+#cluster0.markers <- FindMarkers(expt, ident.1 = 0, logfc.threshold = 0.25, test.use = "roc", only.pos = TRUE)
+
+#cluster0.markers <- FindMarkers(expt, ident.1 = 0, logfc.threshold = 0.25, test.use = "roc", only.pos = TRUE)
+
+```
+
+```{r top10 markers}
+top10 <- expt.markers %>%
+  group_by(cluster) %>%
+  top_n(n = 10, wt = avg_log2FC)
+DoHeatmap(expt, features = top10$gene) + NoLegend()
+```
+
+#```{r cluster IDs}
+#new.cluster.ids <- c(CD1C+_B dendritic cell CD1C-CD141- dendritic cell M1 macrophage
+Angiogenic T cell, hsc
+Germinal center B cell CD1C+_B dendritic cell classical 
+Macrophage Eosinophil )
+#
+#names(new.cluster.ids) <- levels(expt)
+#expt <- RenameIdents(expt, new.cluster.ids)
+#DimPlot(expt, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+#
+#saveRDS(expt, file = "pbmc3k_final.rds")
+#```
+
+
+\newpage
+
+<!-- ## Demultiplexing analysis -->
+
+<!-- ```{r normalise HTOs} -->
+<!-- expt <- NormalizeData(expt, assay = "HTO", normalization.method = "CLR") -->
+<!-- ``` -->
+
+<!-- ```{r HTODemux} -->
+<!-- expt <- HTODemux(expt, assay = "HTO", positive.quantile = 0.99) -->
+<!-- ``` -->
+
