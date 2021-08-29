@@ -1,0 +1,230 @@
+---
+title: "Cell-cell interactions with CellChat"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+## Cell-cell interactions for in vitro COVID-19 vaccinated samples - comparative analysis
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(dev = 'pdf')
+```
+
+
+```{r load_libraries, echo = F}
+# libraries
+#devtools::install_github("sqjin/CellChat")
+#devtools::install_github("thomasp85/patchwork")
+
+suppressPackageStartupMessages(library(CellChat))
+suppressPackageStartupMessages(library(patchwork))
+suppressPackageStartupMessages(library(ComplexHeatmap))
+suppressPackageStartupMessages(library(circlize))
+suppressPackageStartupMessages(library(RColorBrewer))
+suppressPackageStartupMessages(library(svglite))
+suppressPackageStartupMessages(library(NMF))
+suppressPackageStartupMessages(library(ggalluvial))
+suppressPackageStartupMessages(library(tidyverse))
+
+#library(pheatmap)
+options(stringsAsFactors = FALSE)
+#options(bitmapType="cairo")
+```
+
+```{r load_objects_from_all_conditions_and_basic_operations, echo = F}
+
+Ctrl.7 <- readRDS("~/Documents/charite/Sophia/cellchat_7h_Ctrl.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+AZD.7 <- readRDS("~/Documents/charite/Sophia/cellchat_7h_AZD.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+BNT.7 <- readRDS("~/Documents/charite/Sophia/cellchat_7h_BNT.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+
+Ctrl.18 <- readRDS("~/Documents/charite/Sophia/cellchat_18h_Ctrl.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+AZD.18 <- readRDS("~/Documents/charite/Sophia/cellchat_18h_AZD.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+BNT.18 <- readRDS("~/Documents/charite/Sophia/cellchat_18h_BNT.rds") %>%
+  computeCommunProbPathway() %>%
+  aggregateNet() %>%
+  netAnalysis_computeCentrality(., slot.name = "netP")
+
+```
+
+```{r plot_interaction_number_and_strength, echo = F}
+
+# Ctrl.7
+groupSize <- as.numeric(table(Ctrl.7@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(Ctrl.7@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Ctrl(7h) Number of interactions")
+netVisual_circle(Ctrl.7@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Ctrl(7h) Interaction weights/strength")
+
+# AZD.7
+groupSize <- as.numeric(table(AZD.7@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(AZD.7@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "AZD(7h) Number of interactions")
+netVisual_circle(AZD.7@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "AZD(7h) Interaction weights/strength")
+
+# BNT.7
+groupSize <- as.numeric(table(BNT.7@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(BNT.7@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "BNT(7h) Number of interactions")
+netVisual_circle(BNT.7@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "BNT(7h) Interaction weights/strength")
+
+# Ctrl.18
+groupSize <- as.numeric(table(Ctrl.18@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(Ctrl.18@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Ctrl(18h) Number of interactions")
+netVisual_circle(Ctrl.18@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "Ctrl(18h) Interaction weights/strength")
+
+# AZD.18
+groupSize <- as.numeric(table(AZD.18@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(AZD.18@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "AZD(18h) Number of interactions")
+netVisual_circle(AZD.18@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "AZD(18h) Interaction weights/strength")
+
+# BNT.18
+groupSize <- as.numeric(table(BNT.18@idents))
+par(mfrow = c(1,2), xpd=TRUE)
+netVisual_circle(BNT.18@net$count, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "BNT(18h) Number of interactions")
+netVisual_circle(BNT.18@net$weight, vertex.weight = groupSize, weight.scale = T, label.edge= F, title.name = "BNT(18h) Interaction weights/strength")
+
+```
+
+```{r interactions_from_individual_celltype, echo = F, warning=FALSE, fig.dim=c(10,10)}
+
+mat <- Ctrl.7@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+# layout(matrix(c(1,1,2,2,3,3,4,4,
+#                 1,1,2,2,3,3,4,4,
+#                 5,5,6,6,7,7,8,8,
+#                 5,5,6,6,7,7,8,8,
+#                 9,9,10,10,11,11,12,12,
+#                 9,9,10,10,11,11,12,12), nrow = 6, ncol = 8, byrow = TRUE))
+#layout.show(12)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(Ctrl.7@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("Ctrl 7h ", rownames(mat)[i], collapse = ''))
+}
+
+mat <- AZD.7@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(AZD.7@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("AZD 7h ", rownames(mat)[i], collapse = ''))
+}
+
+mat <- BNT.7@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(BNT.7@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("BNT 7h ", rownames(mat)[i], collapse = ''))
+}
+
+
+mat <- Ctrl.18@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(Ctrl.18@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("Ctrl 18h ", rownames(mat)[i], collapse = ''))
+}
+
+mat <- AZD.18@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(AZD.18@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("AZD 18h ", rownames(mat)[i], collapse = ''))
+}
+
+mat <- BNT.18@net$weight
+par(mfrow = c(3,4), xpd=TRUE)
+for (i in 1:nrow(mat)) {
+  mat2 <- matrix(0, nrow = nrow(mat), ncol = ncol(mat), dimnames = dimnames(mat))
+  mat2[i, ] <- mat[i, ]
+  netVisual_circle(mat2, vertex.weight = as.numeric(table(BNT.18@idents)), weight.scale = T, edge.weight.max = max(mat), title.name = paste0("BNT 18h ", rownames(mat)[i], collapse = ''))
+}
+```
+
+```{r net.df}
+
+Ctrl.7.net <- subsetCommunication(Ctrl.7)
+Ctrl.7.net.p <- subsetCommunication(Ctrl.7, slot.name = "netP")
+
+AZD.7.net <- subsetCommunication(AZD.7)
+AZD.7.net.p <- subsetCommunication(AZD.7, slot.name = "netP")
+
+BNT.7.net <- subsetCommunication(BNT.7)
+BNT.7.net.p <- subsetCommunication(BNT.7, slot.name = "netP")
+
+
+Ctrl.18.net <- subsetCommunication(Ctrl.18)
+Ctrl.18.net.p <- subsetCommunication(Ctrl.18, slot.name = "netP")
+
+AZD.18.net <- subsetCommunication(AZD.18)
+AZD.18.net.p <- subsetCommunication(AZD.18, slot.name = "netP")
+
+BNT.18.net <- subsetCommunication(BNT.18)
+BNT.18.net.p <- subsetCommunication(BNT.18, slot.name = "netP")
+```
+
+```{r LR_chord, warning=F, fig.dim=c(10,10), message = F, echo = F, fig.show='animate'}
+
+# Ctrl.7
+pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "TGFb", "CD22", "CD45", "IL16", "TNF", 
+                   "CXCL", "CD96", "CD6", "CD226", "LCK",
+                   "VEGF", "TIGIT", "CDH1", "CD80")
+
+par(mfrow=c(ceiling(length(pathways.show)/5),5), xpd = T)
+for(i in pathways.show)
+{
+ netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = i, color.heatmap = "Reds")
+ 
+}
+
+
+pairLR <- list()
+par(mfrow=c(ceiling(length(pathways.show)/5),5), xpd = T)
+for(j in pathways.show)
+{
+  pairLR[[j]] <- extractEnrichedLR(Ctrl.7, signaling = j, geneLR.return = T)
+  netAnalysis_contribution(Ctrl.7, signaling = j, font.size = 4)
+}
+
+par(mfrow=c(ceiling(length(pathways.show)/5),5), xpd = T)
+for(i in pathways.show)
+{
+ netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "net", signaling = i, color.heatmap = "Reds")
+
+}
+
+
+# par(mfrow=c(1,1))
+# netVisual_aggregate(cellchat, signaling = pathways.show, layout = "chord")
+
+
+# par(mfrow=c(ceiling(nrow(pairLR$pairLR)/5),5), xpd = T)
+# for(j in 1:nrow(pairLR$pairLR))
+#   netVisual_individual(Ctrl.7, signaling = pathways.show,  pairLR.use = "MHC-I", layout = "hierarchy")
+```
