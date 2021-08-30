@@ -172,9 +172,42 @@ Ctrl.7.net <- subsetCommunication(Ctrl.7)
 Ctrl.7.net.p <- subsetCommunication(Ctrl.7, slot.name = "netP")
 
 AZD.7.net <- subsetCommunication(AZD.7)
+AZD.7.net %>% 
+  group_by(source, target) %>% 
+  summarise(AZD.7.n = n()) %>% 
+  mutate(`AZD.7.cell.source.norm%` = (AZD.7.n/sum(AZD.7.n)*100)) %>%
+  mutate(`AZD.7.all.source.norm%` = (AZD.7.n/nrow(AZD.7.net)*100)) -> AZD.7.group.cells
+
+ggplot(data = AZD.7.group.cells, aes(x = target, y = `AZD.7.all.source.norm%`)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~source, ncol = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle("AZD: % of interactions [total: 1042]")+
+  ylab("Percentage of interactions")
+
 AZD.7.net.p <- subsetCommunication(AZD.7, slot.name = "netP")
+AZD.7.net.p %>%
+  group_by(source, target) %>%
+  slice(which.max(prob)) -> AZD.7.strongest.pathway
+(AZD.7.strongest.pathway)
+
 
 BNT.7.net <- subsetCommunication(BNT.7)
+BNT.7.net %>% 
+  group_by(source, target) %>% 
+  summarise(BNT.7.n = n()) %>% 
+  mutate(`BNT.7.cell.source.norm%` = (BNT.7.n/sum(BNT.7.n)*100)) %>%
+  mutate(`BNT.7.all.source.norm%` = (BNT.7.n/nrow(BNT.7.net)*100)) -> BNT.7.group.cells
+
+ggplot(data = BNT.7.group.cells, aes(x = target, y = `BNT.7.all.source.norm%`)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~source, ncol = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle("BNT: % of interactions [total: 878]")+
+  ylab("Percentage of interactions")
+
 BNT.7.net.p <- subsetCommunication(BNT.7, slot.name = "netP")
 
 
