@@ -67,7 +67,7 @@ BNT.18 <- readRDS("~/Documents/charite/Sophia/cellchat_18h_BNT.rds") %>%
 
 ```
 
-```{r plot_interaction_number_and_strength, echo = F}
+```{r plot_interaction_number_and_strength, echo = F, dpi = 300}
 
 # Ctrl.7
 groupSize <- as.numeric(table(Ctrl.7@idents))
@@ -107,7 +107,7 @@ netVisual_circle(BNT.18@net$weight, vertex.weight = groupSize, weight.scale = T,
 
 ```
 
-```{r interactions_from_individual_celltype, echo = F, warning=FALSE, fig.dim=c(10,10)}
+```{r interactions_from_individual_celltype, echo = F, warning=FALSE, fig.dim=c(10,10),dpi = 300}
 
 mat <- Ctrl.7@net$weight
 par(mfrow = c(3,4), xpd=TRUE)
@@ -166,7 +166,7 @@ for (i in 1:nrow(mat)) {
 }
 ```
 
-```{r net.df}
+```{r net.df, echo = F}
 
 Ctrl.7.net <- subsetCommunication(Ctrl.7)
 Ctrl.7.net.p <- subsetCommunication(Ctrl.7, slot.name = "netP")
@@ -188,7 +188,7 @@ BNT.18.net <- subsetCommunication(BNT.18)
 BNT.18.net.p <- subsetCommunication(BNT.18, slot.name = "netP")
 ```
 
-```{r LR_chord, warning=F, fig.dim=c(10,10), message = F, echo = F, fig.show='animate'}
+```{r LR_chord, warning=F, message = F, echo = F, dpi = 300}
 
 # Ctrl.7
 pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
@@ -216,38 +216,9 @@ netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pa
 netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[17], color.heatmap = "Reds")
 netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[18], color.heatmap = "Reds")
 netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[19], color.heatmap = "Reds")
-
-pairLR <- list()
-for(j in pathways.show)
-  pairLR[[j]] <- extractEnrichedLR(Ctrl.7, signaling = j, geneLR.return = T)
-
-par(mfrow=c(4,5), xpd = T)
-
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[1], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[2], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[3], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[4], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[5], font.size = 4)
-
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[6], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[7], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[8], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[9], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[10], font.size = 4)
-
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[11], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[12], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[13], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[14], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[15], font.size = 4)
-
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[16], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[17], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[18], font.size = 4)
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[19], font.size = 4)
 ```
 
-```{r pathway_net_agg, fig.dim = c(10,8)}
+```{r pathway_net_agg, fig.dim = c(10,8), dpi = 300, echo = F}
 par(mfrow=c(3,2))
 netVisual_aggregate(Ctrl.7, signaling = pathways.show[1], layout = "circle")
 netVisual_aggregate(Ctrl.7, signaling = pathways.show[2], layout = "circle")
@@ -276,8 +247,52 @@ netVisual_aggregate(Ctrl.7, signaling = pathways.show[18], layout = "circle")
 netVisual_aggregate(Ctrl.7, signaling = pathways.show[19], layout = "circle")
 ```
 
-```{r LR_plots, fig.dim=c(10,8)}
+```{r, echo = F}
+
+pairLR <- list()
+for(j in pathways.show)
+  pairLR[[j]] <- extractEnrichedLR(Ctrl.7, signaling = j, geneLR.return = T)
+
 par(mfrow=c(4,5), xpd = T)
-for(j in 1:nrow(pairLR$pairLR))
-  netVisual_individual(Ctrl.7, signaling = "MHC-I",  pairLR.use = pairLR$pairLR[j], layout = "hierarchy")
+
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[1], font.size = 6, title = paste0(pathways.show[1], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[2], font.size = 6, title = paste0(pathways.show[2], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[3], font.size = 6, title = paste0(pathways.show[3], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[4], font.size = 6, title = paste0(pathways.show[4], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[5], font.size = 6, title = paste0(pathways.show[5], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[6], font.size = 6, title = paste0(pathways.show[6], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[7], font.size = 6, title = paste0(pathways.show[7], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[8], font.size = 6, title = paste0(pathways.show[8], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[9], font.size = 6, title = paste0(pathways.show[9], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[10], font.size = 6, title = paste0(pathways.show[10], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[11], font.size = 6, title = paste0(pathways.show[11], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[12], font.size = 6, title = paste0(pathways.show[12], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[13], font.size = 6, title = paste0(pathways.show[13], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[14], font.size = 6, title = paste0(pathways.show[14], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[15], font.size = 6, title = paste0(pathways.show[15], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[16], font.size = 6, title = paste0(pathways.show[16], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[17], font.size = 6, title = paste0(pathways.show[17], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[18], font.size = 6, title = paste0(pathways.show[18], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(Ctrl.7, signaling = pathways.show[19], font.size = 6, title = paste0(pathways.show[19], " pathway LR contribution", collapse =''))
+```
+
+```{r LR_plots, fig.dim=c(10,8), dpi = 300, echo = F}
+
+# pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+#                    "TGFb", "CD22", "CD45", "IL16", "TNF", 
+#                    "CXCL", "CD96", "CD6", "CD226", "LCK",
+#                    "VEGF", "TIGIT", "CDH1", "CD80")
+par(mfrow = c(length(pairLR),1))
+for(i in pathways.show)
+{
+  par(mfrow = c(ceiling((nrow(pairLR[[i]]$pairLR)+1/5)),5))
+  netAnalysis_contribution(Ctrl.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+  #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
+  print(paste0(i, " pathway LR pairs"))
+  netVisual_individual(Ctrl.7, signaling = i,  pairLR.use = pairLR[[i]]$pairLR, layout = "circle")
+}
+
 ```
