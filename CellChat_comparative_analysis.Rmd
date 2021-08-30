@@ -209,107 +209,418 @@ ggplot(data = BNT.7.group.cells, aes(x = target, y = `BNT.7.all.source.norm%`)) 
   ylab("Percentage of interactions")
 
 BNT.7.net.p <- subsetCommunication(BNT.7, slot.name = "netP")
+BNT.7.net.p %>%
+  group_by(source, target) %>%
+  slice(which.max(prob)) -> BNT.7.strongest.pathway
+(BNT.7.strongest.pathway)
 
 
 Ctrl.18.net <- subsetCommunication(Ctrl.18)
 Ctrl.18.net.p <- subsetCommunication(Ctrl.18, slot.name = "netP")
 
 AZD.18.net <- subsetCommunication(AZD.18)
+AZD.18.net %>% 
+  group_by(source, target) %>% 
+  summarise(AZD.18.n = n()) %>% 
+  mutate(`AZD.18.cell.source.norm%` = (AZD.18.n/sum(AZD.18.n)*100)) %>%
+  mutate(`AZD.18.all.source.norm%` = (AZD.18.n/nrow(AZD.18.net)*100)) -> AZD.18.group.cells
+
+ggplot(data = AZD.18.group.cells, aes(x = target, y = `AZD.18.all.source.norm%`)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~source, ncol = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle("AZD: % of interactions [total: 711]")+
+  ylab("Percentage of interactions")
+
 AZD.18.net.p <- subsetCommunication(AZD.18, slot.name = "netP")
+AZD.18.net.p %>%
+  group_by(source, target) %>%
+  slice(which.max(prob)) -> AZD.18.strongest.pathway
+(AZD.18.strongest.pathway)
+
 
 BNT.18.net <- subsetCommunication(BNT.18)
+BNT.18.net %>% 
+  group_by(source, target) %>% 
+  summarise(BNT.18.n = n()) %>% 
+  mutate(`BNT.18.cell.source.norm%` = (BNT.18.n/sum(BNT.18.n)*100)) %>%
+  mutate(`BNT.18.all.source.norm%` = (BNT.18.n/nrow(BNT.18.net)*100)) -> BNT.18.group.cells
+
+ggplot(data = BNT.18.group.cells, aes(x = target, y = `BNT.18.all.source.norm%`)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~source, ncol = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ggtitle("BNT: % of interactions [total: 8188]")+
+  ylab("Percentage of interactions")
+
 BNT.18.net.p <- subsetCommunication(BNT.18, slot.name = "netP")
+BNT.18.net.p %>%
+  group_by(source, target) %>%
+  slice(which.max(prob)) -> BNT.18.strongest.pathway
+(BNT.18.strongest.pathway)
+
 ```
 
 ```{r LR_chord, warning=F, message = F, echo = F, dpi = 300}
 
 # Ctrl.7
-pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
-                   "TGFb", "CD22", "CD45", "IL16", "TNF", 
-                   "CXCL", "CD96", "CD6", "CD226", "LCK",
-                   "VEGF", "TIGIT", "CDH1", "CD80")
+# pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+#                    "TGFb", "CD22", "CD45", "IL16", "TNF", 
+#                    "CXCL", "CD96", "CD6", "CD226", "LCK",
+#                    "VEGF", "TIGIT", "CDH1", "CD80")
+#
+# par(mfrow=c(4,5), xpd = T)
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[1], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[2], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[3], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[4], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[5], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[6], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[7], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[8], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[9], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[10], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[11], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[12], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[13], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[14], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[15], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[16], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[17], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[18], color.heatmap = "Reds")
+# netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[19], color.heatmap = "Reds")
+
+# AZD.7
+pathways.show.AZD.7 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "IFN-I", "CD22", "CD45", "CD6", "TNF", 
+                   "CXCL", "CD96", "CDH", "CD226", "IFN-II",
+                   "NECTIN", "TIGIT", "TRAIL", "CD80", "CD137")
 
 par(mfrow=c(4,5), xpd = T)
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[1], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[2], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[3], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[4], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[5], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[6], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[7], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[8], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[9], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[10], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[11], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[12], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[13], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[14], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[15], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[16], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[17], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[18], color.heatmap = "Reds")
-netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[19], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[1], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[2], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[3], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[4], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[5], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[6], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[7], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[8], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[9], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[10], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[11], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[12], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[13], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[14], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[15], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[16], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[17], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[18], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[19], color.heatmap = "Reds")
+netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[20], color.heatmap = "Reds")
+
+# AZD.18
+pathways.show.AZD.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "OX40", "CD70", "TGFb", "CD6", "TNF", 
+                   "CD96", "NECTIN", "TIGIT", "TRAIL", "CD80", 
+                   "CD137")
+
+par(mfrow=c(4,5), xpd = T)
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[1], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[2], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[3], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[4], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[5], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[6], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[7], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[8], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[9], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[10], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[11], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[12], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[13], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[14], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[15], color.heatmap = "Reds")
+netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[16], color.heatmap = "Reds")
+
+# BNT.7
+pathways.show.BNT.7 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
+                   "CD6", "NECTIN", "TIGIT", "TRAIL", "CD96", 
+                   "CD226", "LIGHT", "CD80")
+
+par(mfrow=c(4,5), xpd = T)
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[1], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[2], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[3], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[4], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[5], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[6], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[7], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[8], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[9], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[10], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[11], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[12], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[13], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[14], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[15], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[16], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[17], color.heatmap = "Reds")
+netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[18], color.heatmap = "Reds")
+
+# BNT.18
+pathways.show.BNT.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
+                   "CD6", "NECTIN", "TIGIT", "OX40", "CD96", 
+                   "CD39", "LIGHT", "CD80")
+
+par(mfrow=c(4,5), xpd = T)
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[1], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[2], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[3], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[4], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[5], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[6], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[7], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[8], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[9], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[10], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[11], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[12], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[13], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[14], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[15], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[16], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[17], color.heatmap = "Reds")
+netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[18], color.heatmap = "Reds")
+
 ```
 
 ```{r pathway_net_agg, fig.dim = c(10,8), dpi = 300, echo = F}
+#AZD.7
 par(mfrow=c(3,2))
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[1], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[2], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[3], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[4], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[5], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.18[1], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[2], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[3], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[4], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[5], layout = "circle")
 
 par(mfrow=c(3,2))
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[6], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[7], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[8], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[9], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[10], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[6], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[7], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[8], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[9], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[10], layout = "circle")
 
 par(mfrow=c(3,2))
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[11], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[12], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[13], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[14], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[15], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[11], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[12], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[13], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[14], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[15], layout = "circle")
 
 par(mfrow=c(3,2))
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[16], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[17], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[18], layout = "circle")
-netVisual_aggregate(Ctrl.7, signaling = pathways.show[19], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[16], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[17], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[18], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[19], layout = "circle")
+netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[20], layout = "circle")
+
+#AZD.18
+par(mfrow=c(3,2))
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[1], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[2], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[3], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[4], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[5], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[6], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[7], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[8], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[9], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[10], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[11], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[12], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[13], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[14], layout = "circle")
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[15], layout = "circle")
+
+par(mfrow=c(1,1))
+netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[16], layout = "circle")
+
+# BNT.7
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.7, signaling = pathways.show.AZD.18[1], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[2], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[3], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[4], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[5], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[6], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[7], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[8], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[9], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[10], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[11], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[12], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[13], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[14], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[15], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[16], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[17], layout = "circle")
+netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[18], layout = "circle")
+
+# BNT.18
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.18, signaling = pathways.show.AZD.18[1], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[2], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[3], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[4], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[5], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[6], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[7], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[8], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[9], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[10], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[11], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[12], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[13], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[14], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[15], layout = "circle")
+
+par(mfrow=c(3,2))
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[16], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[17], layout = "circle")
+netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[18], layout = "circle")
+
 ```
 
 ```{r, echo = F}
 
-pairLR <- list()
-for(j in pathways.show)
-  pairLR[[j]] <- extractEnrichedLR(Ctrl.7, signaling = j, geneLR.return = T)
+pairLR.AZD.7 <- list()
+for(j in pathways.show.AZD.7)
+  pairLR.AZD.7[[j]] <- extractEnrichedLR(AZD.7, signaling = j, geneLR.return = T)
 
 par(mfrow=c(4,5), xpd = T)
 
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[1], font.size = 6, title = paste0(pathways.show[1], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[2], font.size = 6, title = paste0(pathways.show[2], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[3], font.size = 6, title = paste0(pathways.show[3], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[4], font.size = 6, title = paste0(pathways.show[4], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[5], font.size = 6, title = paste0(pathways.show[5], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[1], font.size = 6, title = paste0(pathways.show.AZD.7[1], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[2], font.size = 6, title = paste0(pathways.show.AZD.7[2], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[3], font.size = 6, title = paste0(pathways.show.AZD.7[3], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[4], font.size = 6, title = paste0(pathways.show.AZD.7[4], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[5], font.size = 6, title = paste0(pathways.show.AZD.7[5], " pathway LR contribution", collapse =''))
 
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[6], font.size = 6, title = paste0(pathways.show[6], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[7], font.size = 6, title = paste0(pathways.show[7], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[8], font.size = 6, title = paste0(pathways.show[8], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[9], font.size = 6, title = paste0(pathways.show[9], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[10], font.size = 6, title = paste0(pathways.show[10], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[6], font.size = 6, title = paste0(pathways.show.AZD.7[6], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[7], font.size = 6, title = paste0(pathways.show.AZD.7[7], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[8], font.size = 6, title = paste0(pathways.show.AZD.7[8], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[9], font.size = 6, title = paste0(pathways.show.AZD.7[9], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[10], font.size = 6, title = paste0(pathways.show.AZD.7[10], " pathway LR contribution", collapse =''))
 
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[11], font.size = 6, title = paste0(pathways.show[11], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[12], font.size = 6, title = paste0(pathways.show[12], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[13], font.size = 6, title = paste0(pathways.show[13], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[14], font.size = 6, title = paste0(pathways.show[14], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[15], font.size = 6, title = paste0(pathways.show[15], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[11], font.size = 6, title = paste0(pathways.show.AZD.7[11], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[12], font.size = 6, title = paste0(pathways.show.AZD.7[12], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[13], font.size = 6, title = paste0(pathways.show.AZD.7[13], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[14], font.size = 6, title = paste0(pathways.show.AZD.7[14], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[15], font.size = 6, title = paste0(pathways.show.AZD.7[15], " pathway LR contribution", collapse =''))
 
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[16], font.size = 6, title = paste0(pathways.show[16], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[17], font.size = 6, title = paste0(pathways.show[17], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[18], font.size = 6, title = paste0(pathways.show[18], " pathway LR contribution", collapse =''))
-netAnalysis_contribution(Ctrl.7, signaling = pathways.show[19], font.size = 6, title = paste0(pathways.show[19], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[16], font.size = 6, title = paste0(pathways.show.AZD.7[16], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[17], font.size = 6, title = paste0(pathways.show.AZD.7[17], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[18], font.size = 6, title = paste0(pathways.show.AZD.7[18], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[19], font.size = 6, title = paste0(pathways.show.AZD.7[19], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[20], font.size = 6, title = paste0(pathways.show.AZD.7[19], " pathway LR contribution", collapse =''))
+
+
+pairLR.AZD.18 <- list()
+for(j in pathways.show.AZD.18)
+  pairLR.AZD.18[[j]] <- extractEnrichedLR(AZD.18, signaling = j, geneLR.return = T)
+
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[1], font.size = 6, title = paste0(pathways.show.AZD.18[1], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[2], font.size = 6, title = paste0(pathways.show.AZD.18[2], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[3], font.size = 6, title = paste0(pathways.show.AZD.18[3], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[4], font.size = 6, title = paste0(pathways.show.AZD.18[4], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[5], font.size = 6, title = paste0(pathways.show.AZD.18[5], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[6], font.size = 6, title = paste0(pathways.show.AZD.18[6], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[7], font.size = 6, title = paste0(pathways.show.AZD.18[7], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[8], font.size = 6, title = paste0(pathways.show.AZD.18[8], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[9], font.size = 6, title = paste0(pathways.show.AZD.18[9], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[10], font.size = 6, title = paste0(pathways.show.AZD.18[10], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[11], font.size = 6, title = paste0(pathways.show.AZD.18[11], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[12], font.size = 6, title = paste0(pathways.show.AZD.18[12], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[13], font.size = 6, title = paste0(pathways.show.AZD.18[13], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[14], font.size = 6, title = paste0(pathways.show.AZD.18[14], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[15], font.size = 6, title = paste0(pathways.show.AZD.18[15], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[16], font.size = 6, title = paste0(pathways.show.AZD.18[16], " pathway LR contribution", collapse =''))
+
+# BNT.7
+pairLR.BNT.7 <- list()
+for(j in pathways.show.BNT.7)
+  pairLR.BNT.7[[j]] <- extractEnrichedLR(BNT.7, signaling = j, geneLR.return = T)
+
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[1], font.size = 6, title = paste0(pathways.show.BNT.7[1], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[2], font.size = 6, title = paste0(pathways.show.BNT.7[2], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[3], font.size = 6, title = paste0(pathways.show.BNT.7[3], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[4], font.size = 6, title = paste0(pathways.show.BNT.7[4], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[5], font.size = 6, title = paste0(pathways.show.BNT.7[5], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[6], font.size = 6, title = paste0(pathways.show.BNT.7[6], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[7], font.size = 6, title = paste0(pathways.show.BNT.7[7], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[8], font.size = 6, title = paste0(pathways.show.BNT.7[8], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[9], font.size = 6, title = paste0(pathways.show.BNT.7[9], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[10], font.size = 6, title = paste0(pathways.show.BNT.7[10], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[11], font.size = 6, title = paste0(pathways.show.BNT.7[11], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[12], font.size = 6, title = paste0(pathways.show.BNT.7[12], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[13], font.size = 6, title = paste0(pathways.show.BNT.7[13], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[14], font.size = 6, title = paste0(pathways.show.BNT.7[14], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[15], font.size = 6, title = paste0(pathways.show.BNT.7[15], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[16], font.size = 6, title = paste0(pathways.show.BNT.7[16], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[17], font.size = 6, title = paste0(pathways.show.BNT.7[17], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[18], font.size = 6, title = paste0(pathways.show.BNT.7[18], " pathway LR contribution", collapse =''))
+
+# BNT.18
+
+pairLR.BNT.18 <- list()
+for(j in pathways.show.BNT.18)
+  pairLR.BNT.18[[j]] <- extractEnrichedLR(BNT.18, signaling = j, geneLR.return = T)
+
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[1], font.size = 6, title = paste0(pathways.show.BNT.18[1], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[2], font.size = 6, title = paste0(pathways.show.BNT.18[2], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[3], font.size = 6, title = paste0(pathways.show.BNT.18[3], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[4], font.size = 6, title = paste0(pathways.show.BNT.18[4], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[5], font.size = 6, title = paste0(pathways.show.BNT.18[5], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[6], font.size = 6, title = paste0(pathways.show.BNT.18[6], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[7], font.size = 6, title = paste0(pathways.show.BNT.18[7], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[8], font.size = 6, title = paste0(pathways.show.BNT.18[8], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[9], font.size = 6, title = paste0(pathways.show.BNT.18[9], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[10], font.size = 6, title = paste0(pathways.show.BNT.18[10], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[11], font.size = 6, title = paste0(pathways.show.BNT.18[11], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[12], font.size = 6, title = paste0(pathways.show.BNT.18[12], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[13], font.size = 6, title = paste0(pathways.show.BNT.18[13], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[14], font.size = 6, title = paste0(pathways.show.BNT.18[14], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[15], font.size = 6, title = paste0(pathways.show.BNT.18[15], " pathway LR contribution", collapse =''))
+
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[16], font.size = 6, title = paste0(pathways.show.BNT.18[16], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[17], font.size = 6, title = paste0(pathways.show.BNT.18[17], " pathway LR contribution", collapse =''))
+netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[18], font.size = 6, title = paste0(pathways.show.BNT.18[18], " pathway LR contribution", collapse =''))
+
 ```
 
 ```{r LR_plots, fig.dim=c(10,8), dpi = 300, echo = F}
@@ -318,14 +629,43 @@ netAnalysis_contribution(Ctrl.7, signaling = pathways.show[19], font.size = 6, t
 #                    "TGFb", "CD22", "CD45", "IL16", "TNF", 
 #                    "CXCL", "CD96", "CD6", "CD226", "LCK",
 #                    "VEGF", "TIGIT", "CDH1", "CD80")
-par(mfrow = c(length(pairLR),1))
-for(i in pathways.show)
+par(mfrow = c(length(pairLR.AZD.7),1))
+for(i in pathways.show.AZD.7)
 {
-  par(mfrow = c(ceiling((nrow(pairLR[[i]]$pairLR)+1/5)),5))
-  netAnalysis_contribution(Ctrl.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+  par(mfrow = c(ceiling((nrow(pairLR.AZD.7[[i]]$pairLR)+1/5)),5))
+  netAnalysis_contribution(AZD.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
   #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
   print(paste0(i, " pathway LR pairs"))
-  netVisual_individual(Ctrl.7, signaling = i,  pairLR.use = pairLR[[i]]$pairLR, layout = "circle")
+  netVisual_individual(AZD.7, signaling = i,  pairLR.use = pairLR.AZD.7[[i]]$pairLR, layout = "circle")
 }
 
+par(mfrow = c(length(pairLR.AZD.18),1))
+for(i in pathways.show.AZD.18)
+{
+  par(mfrow = c(ceiling((nrow(pairLR.AZD.18[[i]]$pairLR)+1/5)),5))
+  netAnalysis_contribution(AZD.18, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+  #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
+  print(paste0(i, " pathway LR pairs"))
+  netVisual_individual(AZD.18, signaling = i,  pairLR.use = pairLR.AZD.18[[i]]$pairLR, layout = "circle")
+}
+
+par(mfrow = c(length(pairLR.BNT.7),1))
+for(i in pathways.show.BNT.7)
+{
+  par(mfrow = c(ceiling((nrow(pairLR.BNT.7[[i]]$pairLR)+1/5)),5))
+  netAnalysis_contribution(BNT.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+  #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
+  print(paste0(i, " pathway LR pairs"))
+  netVisual_individual(BNT.7, signaling = i,  pairLR.use = pairLR.BNT.7[[i]]$pairLR, layout = "circle")
+}
+
+par(mfrow = c(length(pairLR.BNT.18),1))
+for(i in pathways.show.BNT.18)
+{
+  par(mfrow = c(ceiling((nrow(pairLR.BNT.18[[i]]$pairLR)+1/5)),5))
+  netAnalysis_contribution(BNT.18, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+  #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
+  print(paste0(i, " pathway LR pairs"))
+  netVisual_individual(BNT.18, signaling = i,  pairLR.use = pairLR.BNT.18[[i]]$pairLR, layout = "circle")
+}
 ```
