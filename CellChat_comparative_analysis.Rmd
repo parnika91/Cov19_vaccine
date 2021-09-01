@@ -183,7 +183,7 @@ ggplot(data = AZD.7.group.cells, aes(x = target, y = `AZD.7.all.source.norm%`)) 
   facet_wrap(~source, ncol = 3) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle("AZD: % of interactions [total: 1042]")+
+  ggtitle("AZD 7h: % of interactions [total: 1042]")+
   ylab("Percentage of interactions")
 
 AZD.7.net.p <- subsetCommunication(AZD.7, slot.name = "netP")
@@ -205,7 +205,7 @@ ggplot(data = BNT.7.group.cells, aes(x = target, y = `BNT.7.all.source.norm%`)) 
   facet_wrap(~source, ncol = 3) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle("BNT: % of interactions [total: 878]")+
+  ggtitle("BNT 7h: % of interactions [total: 878]")+
   ylab("Percentage of interactions")
 
 BNT.7.net.p <- subsetCommunication(BNT.7, slot.name = "netP")
@@ -230,7 +230,7 @@ ggplot(data = AZD.18.group.cells, aes(x = target, y = `AZD.18.all.source.norm%`)
   facet_wrap(~source, ncol = 3) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle("AZD: % of interactions [total: 711]")+
+  ggtitle("AZD 18h: % of interactions [total: 711]")+
   ylab("Percentage of interactions")
 
 AZD.18.net.p <- subsetCommunication(AZD.18, slot.name = "netP")
@@ -252,7 +252,7 @@ ggplot(data = BNT.18.group.cells, aes(x = target, y = `BNT.18.all.source.norm%`)
   facet_wrap(~source, ncol = 3) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ggtitle("BNT: % of interactions [total: 8188]")+
+  ggtitle("BNT 18h: % of interactions [total: 777]")+
   ylab("Percentage of interactions")
 
 BNT.18.net.p <- subsetCommunication(BNT.18, slot.name = "netP")
@@ -263,7 +263,7 @@ BNT.18.net.p %>%
 
 ```
 
-```{r LR_chord, warning=F, message = F, echo = F, dpi = 300}
+```{r LR_chord, warning=F, message = F, echo = F, dpi = 300, fig.dim = c(5,3)}
 
 # Ctrl.7
 # pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
@@ -293,10 +293,42 @@ BNT.18.net.p %>%
 # netVisual_heatmap(Ctrl.7, measure = "weight", slot.name = "netP", signaling = pathways.show[19], color.heatmap = "Reds")
 
 # AZD.7
+print("AZD 7h")
 pathways.show.AZD.7 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
                    "IFN-I", "CD22", "CD45", "CD6", "TNF", 
                    "CXCL", "CD96", "CDH", "CD226", "IFN-II",
                    "NECTIN", "TIGIT", "TRAIL", "CD80", "CD137")
+AZD.7@netP$pathways
+print(paste(c("selected pathways: ", pathways.show.AZD.7), collapse = " "))
+
+print("AZD 18h")
+pathways.show.AZD.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "OX40", "CD70", "TGFb", "CD6", "TNF", 
+                   "CD96", "NECTIN", "TIGIT", "LAMININ", "CD80", 
+                   "IL12")
+AZD.18@netP$pathways
+print(paste(c("selected pathways: ", pathways.show.AZD.18), collapse = " "))
+
+print("BNT 7h")
+pathways.show.BNT.7 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
+                   "CD6", "NECTIN", "TIGIT", "CD226", "CD96", 
+                   "CD23", "LIGHT", "CD80")
+BNT.7@netP$pathways
+print(paste(c("selected pathways: ", pathways.show.BNT.7), collapse = " "))
+
+print("BNT 18h")
+pathways.show.BNT.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
+                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
+                   "CD6", "NECTIN", "TIGIT", "OX40", "CD96", 
+                   "CD39", "LIGHT", "CD80")
+
+BNT.18@netP$pathways
+print(paste(c("selected pathways: ", pathways.show.BNT.18), collapse = " "))
+
+
+print("AZD 7h")
+
 
 par(mfrow=c(4,5), xpd = T)
 netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[1], color.heatmap = "Reds")
@@ -321,10 +353,9 @@ netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pat
 netVisual_heatmap(AZD.7, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.7[20], color.heatmap = "Reds")
 
 # AZD.18
-pathways.show.AZD.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
-                   "OX40", "CD70", "TGFb", "CD6", "TNF", 
-                   "CD96", "NECTIN", "TIGIT", "TRAIL", "CD80", 
-                   "CD137")
+
+print("AZD 18h")
+
 
 par(mfrow=c(4,5), xpd = T)
 netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[1], color.heatmap = "Reds")
@@ -345,10 +376,8 @@ netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pa
 netVisual_heatmap(AZD.18, measure = "weight", slot.name = "netP", signaling = pathways.show.AZD.18[16], color.heatmap = "Reds")
 
 # BNT.7
-pathways.show.BNT.7 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
-                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
-                   "CD6", "NECTIN", "TIGIT", "TRAIL", "CD96", 
-                   "CD226", "LIGHT", "CD80")
+print("BNT 7h")
+
 
 par(mfrow=c(4,5), xpd = T)
 netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[1], color.heatmap = "Reds")
@@ -371,10 +400,7 @@ netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pat
 netVisual_heatmap(BNT.7, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.7[18], color.heatmap = "Reds")
 
 # BNT.18
-pathways.show.BNT.18 <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
-                   "CD22", "CD45", "TGFb", "CXCL", "TNF", 
-                   "CD6", "NECTIN", "TIGIT", "OX40", "CD96", 
-                   "CD39", "LIGHT", "CD80")
+print("BNT 18h")
 
 par(mfrow=c(4,5), xpd = T)
 netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pathways.show.BNT.18[1], color.heatmap = "Reds")
@@ -400,6 +426,7 @@ netVisual_heatmap(BNT.18, measure = "weight", slot.name = "netP", signaling = pa
 
 ```{r pathway_net_agg, fig.dim = c(10,8), dpi = 300, echo = F}
 #AZD.7
+print("AZD 7h")
 par(mfrow=c(3,2))
 netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.18[1], layout = "circle")
 netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[2], layout = "circle")
@@ -429,6 +456,7 @@ netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[19], layout = "circle
 netVisual_aggregate(AZD.7, signaling = pathways.show.AZD.7[20], layout = "circle")
 
 #AZD.18
+print("AZD 18h")
 par(mfrow=c(3,2))
 netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[1], layout = "circle")
 netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[2], layout = "circle")
@@ -454,6 +482,7 @@ par(mfrow=c(1,1))
 netVisual_aggregate(AZD.18, signaling = pathways.show.AZD.18[16], layout = "circle")
 
 # BNT.7
+print("BNT 7h")
 par(mfrow=c(3,2))
 netVisual_aggregate(BNT.7, signaling = pathways.show.AZD.18[1], layout = "circle")
 netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[2], layout = "circle")
@@ -481,6 +510,7 @@ netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[17], layout = "circle
 netVisual_aggregate(BNT.7, signaling = pathways.show.BNT.7[18], layout = "circle")
 
 # BNT.18
+print("BNT 18h")
 par(mfrow=c(3,2))
 netVisual_aggregate(BNT.18, signaling = pathways.show.AZD.18[1], layout = "circle")
 netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[2], layout = "circle")
@@ -509,8 +539,8 @@ netVisual_aggregate(BNT.18, signaling = pathways.show.BNT.18[18], layout = "circ
 
 ```
 
-```{r, echo = F}
-
+```{r, echo = F, dpi = 300, fig.dim = c(5,3)}
+print("AZD 7h")
 pairLR.AZD.7 <- list()
 for(j in pathways.show.AZD.7)
   pairLR.AZD.7[[j]] <- extractEnrichedLR(AZD.7, signaling = j, geneLR.return = T)
@@ -541,7 +571,7 @@ netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[18], font.size =
 netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[19], font.size = 6, title = paste0(pathways.show.AZD.7[19], " pathway LR contribution", collapse =''))
 netAnalysis_contribution(AZD.7, signaling = pathways.show.AZD.7[20], font.size = 6, title = paste0(pathways.show.AZD.7[19], " pathway LR contribution", collapse =''))
 
-
+print("AZD 18h")
 pairLR.AZD.18 <- list()
 for(j in pathways.show.AZD.18)
   pairLR.AZD.18[[j]] <- extractEnrichedLR(AZD.18, signaling = j, geneLR.return = T)
@@ -567,6 +597,7 @@ netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[15], font.size
 netAnalysis_contribution(AZD.18, signaling = pathways.show.AZD.18[16], font.size = 6, title = paste0(pathways.show.AZD.18[16], " pathway LR contribution", collapse =''))
 
 # BNT.7
+print("BNT 7h")
 pairLR.BNT.7 <- list()
 for(j in pathways.show.BNT.7)
   pairLR.BNT.7[[j]] <- extractEnrichedLR(BNT.7, signaling = j, geneLR.return = T)
@@ -594,7 +625,7 @@ netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[17], font.size =
 netAnalysis_contribution(BNT.7, signaling = pathways.show.BNT.7[18], font.size = 6, title = paste0(pathways.show.BNT.7[18], " pathway LR contribution", collapse =''))
 
 # BNT.18
-
+print("BNT 18h")
 pairLR.BNT.18 <- list()
 for(j in pathways.show.BNT.18)
   pairLR.BNT.18[[j]] <- extractEnrichedLR(BNT.18, signaling = j, geneLR.return = T)
@@ -623,49 +654,333 @@ netAnalysis_contribution(BNT.18, signaling = pathways.show.BNT.18[18], font.size
 
 ```
 
-```{r LR_plots, fig.dim=c(10,8), dpi = 300, echo = F}
+```{r LR_plots, fig.dim=c(9,7), dpi = 300, echo = F}
 
 # pathways.show <- c("CCL", "ICAM", "ITGB2", "BAFF", "ADGRE5", 
 #                    "TGFb", "CD22", "CD45", "IL16", "TNF", 
 #                    "CXCL", "CD96", "CD6", "CD226", "LCK",
 #                    "VEGF", "TIGIT", "CDH1", "CD80")
-par(mfrow = c(length(pairLR.AZD.7),1))
-for(i in pathways.show.AZD.7)
-{
-  par(mfrow = c(ceiling((nrow(pairLR.AZD.7[[i]]$pairLR)+1/5)),5))
-  netAnalysis_contribution(AZD.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
-  #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
-  print(paste0(i, " pathway LR pairs"))
-  netVisual_individual(AZD.7, signaling = i,  pairLR.use = pairLR.AZD.7[[i]]$pairLR, layout = "circle")
-}
+# print("AZD 7h")
+# par(mfrow = c(length(pairLR.AZD.7),1))
+# for(i in pathways.show.AZD.7)
+# {
+#   par(mfrow = c(ceiling((nrow(pairLR.AZD.7[[i]]$pairLR)+1)/5),5))
+#   #netAnalysis_contribution(AZD.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
+#   #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
+#   print(paste0(i, " pathway LR pairs"))
+#   netVisual_individual(AZD.7, signaling = i,  pairLR.use = pairLR.AZD.7[[i]]$pairLR, layout = "circle")
+# }
 
+print("AZD 18h")
 par(mfrow = c(length(pairLR.AZD.18),1))
 for(i in pathways.show.AZD.18)
 {
-  par(mfrow = c(ceiling((nrow(pairLR.AZD.18[[i]]$pairLR)+1/5)),5))
+  par(mfrow = c(ceiling((nrow(pairLR.AZD.18[[i]]$pairLR)+1)/5),5))
   netAnalysis_contribution(AZD.18, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
   #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
   print(paste0(i, " pathway LR pairs"))
   netVisual_individual(AZD.18, signaling = i,  pairLR.use = pairLR.AZD.18[[i]]$pairLR, layout = "circle")
 }
 
+print("BNT 7h")
 par(mfrow = c(length(pairLR.BNT.7),1))
 for(i in pathways.show.BNT.7)
 {
-  par(mfrow = c(ceiling((nrow(pairLR.BNT.7[[i]]$pairLR)+1/5)),5))
+  par(mfrow = c(ceiling((nrow(pairLR.BNT.7[[i]]$pairLR)+1)/5),5))
   netAnalysis_contribution(BNT.7, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
   #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
   print(paste0(i, " pathway LR pairs"))
   netVisual_individual(BNT.7, signaling = i,  pairLR.use = pairLR.BNT.7[[i]]$pairLR, layout = "circle")
 }
 
+print("BNT 18h")
 par(mfrow = c(length(pairLR.BNT.18),1))
 for(i in pathways.show.BNT.18)
 {
-  par(mfrow = c(ceiling((nrow(pairLR.BNT.18[[i]]$pairLR)+1/5)),5))
+  par(mfrow = c(ceiling((nrow(pairLR.BNT.18[[i]]$pairLR)+1)/5),5))
   netAnalysis_contribution(BNT.18, signaling = i, font.size = 6, title = paste0(i, " pathway LR contribution", collapse =''))
   #par(mfrow = c(ceiling(nrow(pairLR[[i]]$pairLR)/5),5))
   print(paste0(i, " pathway LR pairs"))
   netVisual_individual(BNT.18, signaling = i,  pairLR.use = pairLR.BNT.18[[i]]$pairLR, layout = "circle")
 }
+```
+
+```{r gene_exp_LR, echo = F, dpi = 300, warning=FALSE, message=FALSE, fig.dim=c(4,3)}
+# AZD.7
+print("AZD 18h")
+par(mfrow = c(length(pathways.show.AZD.7),1))
+print(pathways.show.AZD.7[1])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[1],  enriched.only = T)
+print(pathways.show.AZD.7[2])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[2],  enriched.only = T)
+print(pathways.show.AZD.7[3])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[3],  enriched.only = T)
+print(pathways.show.AZD.7[4])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[4],  enriched.only = T)
+print(pathways.show.AZD.7[5])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[5],  enriched.only = T)
+print(pathways.show.AZD.7[6])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[6],  enriched.only = T)
+print(pathways.show.AZD.7[7])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[7],  enriched.only = T)
+print(pathways.show.AZD.7[8])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[8],  enriched.only = T)
+print(pathways.show.AZD.7[9])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[9],  enriched.only = T)
+print(pathways.show.AZD.7[10])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[10],  enriched.only = T)
+print(pathways.show.AZD.7[11])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[11],  enriched.only = T)
+print(pathways.show.AZD.7[12])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[12],  enriched.only = T)
+print(pathways.show.AZD.7[13])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[13],  enriched.only = T)
+print(pathways.show.AZD.7[14])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[14],  enriched.only = T)
+print(pathways.show.AZD.7[15])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[15],  enriched.only = T)
+print(pathways.show.AZD.7[16])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[16],  enriched.only = T)
+print(pathways.show.AZD.7[17])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[17],  enriched.only = T)
+print(pathways.show.AZD.7[18])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[18],  enriched.only = T)
+print(pathways.show.AZD.7[19])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[19],  enriched.only = T)
+print(pathways.show.AZD.7[20])
+plotGeneExpression(AZD.7, signaling = pathways.show.AZD.7[20],  enriched.only = T)
+
+# AZD.18
+print("AZD 18h")
+par(mfrow = c(length(pathways.show.AZD.18),1))
+print(pathways.show.AZD.18[1])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[1],  enriched.only = T)
+print(pathways.show.AZD.18[2])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[2],  enriched.only = T)
+print(pathways.show.AZD.18[3])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[3],  enriched.only = T)
+print(pathways.show.AZD.18[4])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[4],  enriched.only = T)
+print(pathways.show.AZD.18[5])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[5],  enriched.only = T)
+print(pathways.show.AZD.18[6])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[6],  enriched.only = T)
+print(pathways.show.AZD.18[7])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[7],  enriched.only = T)
+print(pathways.show.AZD.18[8])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[8],  enriched.only = T)
+print(pathways.show.AZD.18[9])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[9],  enriched.only = T)
+print(pathways.show.AZD.18[10])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[10],  enriched.only = T)
+print(pathways.show.AZD.18[11])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[11],  enriched.only = T)
+print(pathways.show.AZD.18[12])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[12],  enriched.only = T)
+print(pathways.show.AZD.18[13])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[13],  enriched.only = T)
+print(pathways.show.AZD.18[14])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[14],  enriched.only = T)
+print(pathways.show.AZD.18[15])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[15],  enriched.only = T)
+print(pathways.show.AZD.18[16])
+plotGeneExpression(AZD.18, signaling = pathways.show.AZD.18[16],  enriched.only = T)
+
+# BNT.7
+print("BNT 7h")
+par(mfrow = c(length(pathways.show.BNT.7),1))
+print(pathways.show.BNT.7[1])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[1],  enriched.only = T)
+print(pathways.show.BNT.7[2])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[2],  enriched.only = T)
+print(pathways.show.BNT.7[3])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[3],  enriched.only = T)
+print(pathways.show.BNT.7[4])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[4],  enriched.only = T)
+print(pathways.show.BNT.7[5])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[5],  enriched.only = T)
+print(pathways.show.BNT.7[6])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[6],  enriched.only = T)
+print(pathways.show.BNT.7[7])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[7],  enriched.only = T)
+print(pathways.show.BNT.7[8])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[8],  enriched.only = T)
+print(pathways.show.BNT.7[9])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[9],  enriched.only = T)
+print(pathways.show.BNT.7[10])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[10],  enriched.only = T)
+print(pathways.show.BNT.7[11])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[11],  enriched.only = T)
+print(pathways.show.BNT.7[12])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[12],  enriched.only = T)
+print(pathways.show.BNT.7[13])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[13],  enriched.only = T)
+print(pathways.show.BNT.7[14])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[14],  enriched.only = T)
+print(pathways.show.BNT.7[15])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[15],  enriched.only = T)
+print(pathways.show.BNT.7[16])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[16],  enriched.only = T)
+print(pathways.show.BNT.7[17])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[17],  enriched.only = T)
+print(pathways.show.BNT.7[18])
+plotGeneExpression(BNT.7, signaling = pathways.show.BNT.7[18],  enriched.only = T)
+
+# BNT.18
+print("BNT 18h")
+par(mfrow = c(length(pathways.show.BNT.18),1))
+print(pathways.show.BNT.18[1])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[1],  enriched.only = T)
+print(pathways.show.BNT.18[2])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[2],  enriched.only = T)
+print(pathways.show.BNT.18[3])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[3],  enriched.only = T)
+print(pathways.show.BNT.18[4])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[4],  enriched.only = T)
+print(pathways.show.BNT.18[5])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[5],  enriched.only = T)
+print(pathways.show.BNT.18[6])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[6],  enriched.only = T)
+print(pathways.show.BNT.18[7])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[7],  enriched.only = T)
+print(pathways.show.BNT.18[8])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[8],  enriched.only = T)
+print(pathways.show.BNT.18[9])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[9],  enriched.only = T)
+print(pathways.show.BNT.18[10])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[10],  enriched.only = T)
+print(pathways.show.BNT.18[11])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[11],  enriched.only = T)
+print(pathways.show.BNT.18[12])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[12],  enriched.only = T)
+print(pathways.show.BNT.18[13])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[13],  enriched.only = T)
+print(pathways.show.BNT.18[14])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[14],  enriched.only = T)
+print(pathways.show.BNT.18[15])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[15],  enriched.only = T)
+print(pathways.show.BNT.18[16])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[16],  enriched.only = T)
+print(pathways.show.BNT.18[17])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[17],  enriched.only = T)
+print(pathways.show.BNT.18[18])
+plotGeneExpression(BNT.18, signaling = pathways.show.BNT.18[18],  enriched.only = T)
+```
+
+```{r signaling_pattern, fig.dim = c(10,9),dpi = 300}
+print("AZD 7h")
+ht1 <- netAnalysis_signalingRole_heatmap(AZD.7, pattern = "outgoing", font.size = 6, title = "AZD 7h", font.size.title = 8)
+ht2 <- netAnalysis_signalingRole_heatmap(AZD.7, pattern = "incoming", font.size = 6, title = "AZD 7h", font.size.title = 8)
+ht1 + ht2
+
+print("AZD 18h")
+ht1 <- netAnalysis_signalingRole_heatmap(AZD.18, pattern = "outgoing", font.size = 6, title = "AZD 18h", font.size.title = 8)
+ht2 <- netAnalysis_signalingRole_heatmap(AZD.18, pattern = "incoming", font.size = 6, title = "AZD 18h", font.size.title = 8)
+ht1 + ht2
+
+print("BNT 7h")
+ht1 <- netAnalysis_signalingRole_heatmap(BNT.7, pattern = "outgoing", font.size = 6, title = "BNT 7h", font.size.title = 8)
+ht2 <- netAnalysis_signalingRole_heatmap(BNT.7, pattern = "incoming", font.size = 6, title = "BNT 7h", font.size.title = 8)
+ht1 + ht2
+
+print("BNT 18h")
+ht1 <- netAnalysis_signalingRole_heatmap(BNT.18, pattern = "outgoing", font.size = 6, title = "BNT 18h", font.size.title = 8)
+ht2 <- netAnalysis_signalingRole_heatmap(BNT.18, pattern = "incoming", font.size = 6, title = "BNT 18h", font.size.title = 8)
+ht1 + ht2
+
+```
+
+```{r signaling_patterns_cop_sil, fig.dim = c(10,8), dpi = 300}
+# CellChat::selectK(AZD.7, pattern = "outgoing")
+# river plot
+library(ggalluvial)
+print("AZD 7h")
+#par(mfrow = c(2, 1))
+nPatterns = 3
+AZD.7 <- identifyCommunicationPatterns(AZD.7, pattern = "outgoing", k = nPatterns, font.size = 5)
+
+print("AZD 18h")
+#par(mfrow = c(2, 1))
+nPatterns = 3
+AZD.18 <- identifyCommunicationPatterns(AZD.18, pattern = "outgoing", k = nPatterns, font.size = 5)
+
+print("BNT 7h")
+#par(mfrow = c(2, 1))
+nPatterns = 3
+BNT.7 <- identifyCommunicationPatterns(BNT.7, pattern = "outgoing", k = nPatterns, font.size = 5)
+
+print("BNT 18h")
+#par(mfrow = c(2, 1))
+nPatterns = 3
+BNT.18 <- identifyCommunicationPatterns(BNT.18, pattern = "outgoing", k = nPatterns, font.size = 5)
+```
+
+```{r}
+print("AZD 7h")
+CellChat::netAnalysis_river(AZD.7, pattern = "outgoing", font.size = 3)
+#CellChat::netAnalysis_river(AZD.7, pattern = "incoming", font.size = 3)
+print("AZD 18h")
+CellChat::netAnalysis_river(AZD.18, pattern = "outgoing", font.size = 3)
+#CellChat::netAnalysis_river(AZD.18, pattern = "incoming", font.size = 3)
+print("BNT 7h")
+CellChat::netAnalysis_river(BNT.7, pattern = "outgoing", font.size = 3)
+#CellChat::netAnalysis_river(BNT.7, pattern = "incoming", font.size = 3)
+print("BNT 18h")
+CellChat::netAnalysis_river(BNT.18, pattern = "outgoing", font.size = 3)
+#CellChat::netAnalysis_river(BNT.18, pattern = "incoming", font.size = 3)
+
+```
+
+```{r functional_similarity}
+
+AZD.7 <- computeNetSimilarity(AZD.7, type = "functional")
+AZD.7 <- netEmbedding(AZD.7, type = "functional")
+AZD.7 <- netClustering(AZD.7, type = "functional")
+netVisual_embedding(AZD.7, type = "functional", label.size = 2, dot.size = c(1,4), title = "AZD 7h functional similarity")
+netVisual_embeddingZoomIn(AZD.7, type = "functional", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+AZD.18 <- computeNetSimilarity(AZD.18, type = "functional")
+AZD.18 <- netEmbedding(AZD.18, type = "functional")
+AZD.18 <- netClustering(AZD.18, type = "functional")
+netVisual_embedding(AZD.18, type = "functional", label.size = 2, dot.size = c(1,4), title = "AZD 18h functional similarity")
+netVisual_embeddingZoomIn(AZD.18, type = "functional", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+BNT.7 <- computeNetSimilarity(BNT.7, type = "functional")
+BNT.7 <- netEmbedding(BNT.7, type = "functional")
+BNT.7 <- netClustering(BNT.7, type = "functional")
+netVisual_embedding(BNT.7, type = "functional", label.size = 2, dot.size = c(1,4), title = "BNT 7h functional similarity")
+netVisual_embeddingZoomIn(BNT.7, type = "functional", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+BNT.18 <- computeNetSimilarity(BNT.18, type = "functional")
+BNT.18 <- netEmbedding(BNT.18, type = "functional")
+BNT.18 <- netClustering(BNT.18, type = "functional")
+netVisual_embedding(BNT.18, type = "functional", label.size = 2, dot.size = c(1,4), title = "BNT 18h functional similarity")
+netVisual_embeddingZoomIn(BNT.18, type = "functional", nCol = 2, dot.size = c(1,4), label.size = 2)
+```
+
+```{r struct_similarity}
+
+AZD.7 <- computeNetSimilarity(AZD.7, type = "structural")
+AZD.7 <- netEmbedding(AZD.7, type = "structural")
+AZD.7 <- netClustering(AZD.7, type = "structural")
+netVisual_embedding(AZD.7, type = "structural", label.size = 2, dot.size = c(1,4), title = "AZD 7h structural similarity")
+netVisual_embeddingZoomIn(AZD.7, type = "structural", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+AZD.18 <- computeNetSimilarity(AZD.18, type = "structural")
+AZD.18 <- netEmbedding(AZD.18, type = "structural")
+AZD.18 <- netClustering(AZD.18, type = "structural")
+netVisual_embedding(AZD.18, type = "structural", label.size = 2, dot.size = c(1,4), title = "AZD 18h structural similarity")
+netVisual_embeddingZoomIn(AZD.18, type = "structural", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+BNT.7 <- computeNetSimilarity(BNT.7, type = "structural")
+BNT.7 <- netEmbedding(BNT.7, type = "structural")
+BNT.7 <- netClustering(BNT.7, type = "structural")
+netVisual_embedding(BNT.7, type = "structural", label.size = 2, dot.size = c(1,4), title = "BNT 7h structural similarity")
+netVisual_embeddingZoomIn(BNT.7, type = "structural", nCol = 2, dot.size = c(1,4), label.size = 2)
+
+BNT.18 <- computeNetSimilarity(BNT.18, type = "structural")
+BNT.18 <- netEmbedding(BNT.18, type = "structural")
+BNT.18 <- netClustering(BNT.18, type = "structural")
+netVisual_embedding(BNT.18, type = "structural", label.size = 2, dot.size = c(1,4), title = "BNT 18h structural similarity")
+netVisual_embeddingZoomIn(BNT.18, type = "structural", nCol = 2, dot.size = c(1,4), label.size = 2)
 ```
